@@ -1,11 +1,11 @@
-# cadido-website
+# candango-website
 
 Candango's public **marketing website** — a standalone **Astro + Tailwind** static site, separate from the product app (`apps/web`). Implements the approved **Website Design System** (docs vault → `06 - Delivery/Website Design System.md`).
 
 ## Develop
 
 ```bash
-cd cadido-website
+cd candango-website
 npm install
 npm run dev      # http://localhost:4321
 npm run build    # static output → dist/
