@@ -1,0 +1,58 @@
+---
+const cols = [
+  {
+    title: 'Product',
+    links: [
+      { label: 'Features', href: '/#features' },
+      { label: 'Pricing', href: '/#pricing' },
+      { label: 'FAQ', href: '/#faq' },
+    ],
+  },
+  {
+    title: 'Company',
+    links: [
+      { label: 'Contact', href: '/contact' },
+      { label: 'Status', href: '#' },
+    ],
+  },
+  {
+    title: 'Legal',
+    links: [
+      { label: 'Privacy Policy', href: '/privacy' },
+      { label: 'Terms of Service', href: '/terms' },
+    ],
+  },
+];
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-sand-200 bg-sand-cream">
+  <div class="container-site grid gap-10 py-16 md:grid-cols-[1.4fr_repeat(3,1fr)]">
+    <div>
+      <a href="/" class="font-display text-[22px] font-extrabold tracking-[-0.035em] text-ink">
+        <span class="text-terra-600">C</span>andango
+      </a>
+      <p class="mt-3 max-w-xs text-sm text-ink-muted">
+        The warm, fast sales CRM for small teams that move quickly.
+      </p>
+    </div>
+    {cols.map((c) => (
+      <div>
+        <h4 class="mb-3 font-mono text-eyebrow uppercase text-ink-soft">{c.title}</h4>
+        <ul class="space-y-2">
+          {c.links.map((l) => (
+            <li>
+              <a href={l.href} class="text-sm text-ink-muted transition hover:text-terra-700">{l.label}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+  <div class="border-t border-sand-200">
+    <div class="container-site flex flex-col items-center justify-between gap-2 py-6 text-xs text-ink-soft md:flex-row">
+      <span>© {year} Candango. All rights reserved.</span>
+      <span>Made with red-earth roots — Brasília, BR.</span>
+    </div>
+  </div>
+</footer>

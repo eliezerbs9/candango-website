@@ -1,0 +1,41 @@
+---
+// Product screenshot in a browser frame. Pass `src` to use a real image;
+// otherwise it renders a labelled placeholder. Swap placeholders before launch.
+interface Props {
+  label?: string;
+  src?: string;
+  alt?: string;
+  tone?: 'light' | 'pine';
+  height?: string; // tailwind height classes for the placeholder
+  class?: string;
+}
+const {
+  label = 'product screenshot',
+  src,
+  alt = '',
+  tone = 'light',
+  height = 'h-64 md:h-80',
+  class: cls = '',
+} = Astro.props;
+---
+
+<div class={`overflow-hidden rounded-[18px] border-[6px] border-[#2a2723] shadow-lg ${cls}`}>
+  <div class="flex h-9 items-center gap-1.5 border-b border-sand-200 bg-sand-cream px-4">
+    <span class="h-2.5 w-2.5 rounded-full bg-terra-300"></span>
+    <span class="h-2.5 w-2.5 rounded-full bg-sand-300"></span>
+    <span class="h-2.5 w-2.5 rounded-full bg-pine-100"></span>
+  </div>
+  {
+    src ? (
+      <img src={src} alt={alt} class="block w-full" />
+    ) : (
+      <div
+        class={`grid ${height} place-items-center text-sm text-ink-soft ${
+          tone === 'pine' ? 'bg-pine-50' : 'bg-gradient-to-b from-sand-cream to-sand'
+        }`}
+      >
+        [ {label} ]
+      </div>
+    )
+  }
+</div>

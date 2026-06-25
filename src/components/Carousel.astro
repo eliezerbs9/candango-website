@@ -1,0 +1,143 @@
+---
+// A product-screenshot carousel inside a single browser frame (follows the design system).
+// Pass `slides` with a caption + optional image. Controls: dots, arrows, swipe, keyboard,
+// and a gentle autoplay that pauses on hover/focus and is disabled under reduced motion.
+interface Slide {
+  label: string;
+  /** Short service description shown as the caption under the slider. */
+  caption?: string;
+  src?: string;
+  alt?: string;
+  tone?: 'light' | 'pine';
+}
+interface Props {
+  slides: Slide[];
+  height?: string;
+  class?: string;
+}
+const { slides, height = 'h-64 md:h-80', class: cls = '' } = Astro.props;
+---
+
+<div class={`relative ${cls}`} data-carousel role="group" aria-roledescription="carousel" tabindex="0">
+  <!-- Browser frame (chrome stays put; slides change inside) -->
+  <div class="overflow-hidden rounded-[18px] border-[6px] border-[#2a2723] shadow-lg">
+    <div class="flex h-9 items-center gap-1.5 border-b border-sand-200 bg-sand-cream px-4">
+      <span class="h-2.5 w-2.5 rounded-full bg-terra-300"></span>
+      <span class="h-2.5 w-2.5 rounded-full bg-sand-300"></span>
+      <span class="h-2.5 w-2.5 rounded-full bg-pine-100"></span>
+    </div>
+    <div class="flex transition-transform duration-500 ease-soft motion-reduce:transition-none" data-track>
+      {
+        slides.map((s, i) => (
+          <div class="w-full shrink-0" role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${slides.length}`} data-slide-caption={s.caption ?? s.label}>
+            {s.src ? (
+              <img src={s.src} alt={s.alt ?? s.label} class="block w-full" />
+            ) : (
+              <div class={`grid ${height} place-items-center text-sm text-ink-soft ${s.tone === 'pine' ? 'bg-pine-50' : 'bg-gradient-to-b from-sand-cream to-sand'}`}>
+                [ {s.label} ]
+              </div>
+            )}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  {slides.length > 1 && (
+    <>
+      <!-- Arrows -->
+      <button
+        type="button"
+        data-prev
+        aria-label="Previous screenshot"
+        class="absolute left-2 top-[calc(50%+10px)] grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-ink shadow-md backdrop-blur transition hover:bg-white"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6" /></svg>
+      </button>
+      <button
+        type="button"
+        data-next
+        aria-label="Next screenshot"
+        class="absolute right-2 top-[calc(50%+10px)] grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-ink shadow-md backdrop-blur transition hover:bg-white"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg>
+      </button>
+
+      <!-- Dots + live caption -->
+      <div class="mt-5 flex items-center justify-center gap-2" data-dots>
+        {slides.map((_, i) => (
+          <button
+            type="button"
+            data-dot={i}
+            aria-label={`Go to screenshot ${i + 1}`}
+            class="h-2 w-2 rounded-full bg-sand-300 transition-all duration-300 ease-soft"
+          />
+        ))}
+      </div>
+      <p class="mt-2 text-center font-mono text-eyebrow uppercase text-ink-soft" data-caption aria-live="polite" />
+    </>
+  )}
+</div>
+
+<script>
+  function initCarousel(root: HTMLElement) {
+    const track = root.querySelector<HTMLElement>('[data-track]');
+    const dots = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-dot]'));
+    const caption = root.querySelector<HTMLElement>('[data-caption]');
+    const slides = track ? Array.from(track.children) : [];
+    if (!track || slides.length <= 1) return;
+
+    const captions = slides.map((s) => s.getAttribute('data-slide-caption') ?? '');
+    let i = 0;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function go(n: number) {
+      i = (n + slides.length) % slides.length;
+      track!.style.transform = `translateX(-${i * 100}%)`;
+      dots.forEach((d, j) => {
+        d.classList.toggle('bg-terra-600', j === i);
+        d.classList.toggle('w-5', j === i);
+        d.classList.toggle('bg-sand-300', j !== i);
+        d.classList.toggle('w-2', j !== i);
+        d.setAttribute('aria-current', String(j === i));
+      });
+      if (caption) caption.textContent = captions[i];
+    }
+
+    dots.forEach((d, j) => d.addEventListener('click', () => go(j)));
+    root.querySelector('[data-prev]')?.addEventListener('click', () => go(i - 1));
+    root.querySelector('[data-next]')?.addEventListener('click', () => go(i + 1));
+    root.addEventListener('keydown', (e) => {
+      if ((e as KeyboardEvent).key === 'ArrowLeft') go(i - 1);
+      if ((e as KeyboardEvent).key === 'ArrowRight') go(i + 1);
+    });
+
+    // Touch swipe
+    let x0: number | null = null;
+    root.addEventListener('touchstart', (e) => (x0 = e.touches[0].clientX), { passive: true });
+    root.addEventListener('touchend', (e) => {
+      if (x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 40) go(dx < 0 ? i + 1 : i - 1);
+      x0 = null;
+    });
+
+    // Gentle autoplay (pauses on hover/focus; off under reduced motion)
+    let timer: number | undefined;
+    const start = () => {
+      if (reduce) return;
+      stop();
+      timer = window.setInterval(() => go(i + 1), 5000);
+    };
+    const stop = () => timer && window.clearInterval(timer);
+    root.addEventListener('pointerenter', stop);
+    root.addEventListener('pointerleave', start);
+    root.addEventListener('focusin', stop);
+    root.addEventListener('focusout', start);
+
+    go(0);
+    start();
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-carousel]').forEach(initCarousel);
+</script>

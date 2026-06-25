@@ -1,0 +1,24 @@
+---
+const links = [
+  { label: 'Features', href: '#features' },
+  { label: 'Pricing', href: '#pricing' },
+  { label: 'FAQ', href: '#faq' },
+];
+const appUrl = 'http://localhost:3000'; // TODO: production app URL
+---
+
+<header class="sticky top-0 z-50 border-b border-sand-200 bg-sand-cream/80 backdrop-blur-md backdrop-saturate-150">
+  <nav class="container-site flex h-[62px] items-center justify-between">
+    <a href="/" class="font-display text-[22px] font-extrabold tracking-[-0.035em] text-ink">
+      <span class="text-terra-600">C</span>andango
+    </a>
+    <div class="hidden items-center gap-7 md:flex">
+      {links.map((l) => (
+        <a href={l.href} class="text-[15px] text-ink-muted transition hover:text-ink">{l.label}</a>
+      ))}
+      <a href={`${appUrl}/login`} class="text-[15px] text-ink-muted transition hover:text-ink">Sign in</a>
+      <a href={`${appUrl}/signup`} class="btn btn-primary px-4 py-2 text-sm">Start free</a>
+    </div>
+    <a href={`${appUrl}/signup`} class="btn btn-primary px-4 py-2 text-sm md:hidden">Start free</a>
+  </nav>
+</header>

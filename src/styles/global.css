@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-sand-cream text-ink font-sans antialiased;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display;
+  }
+  ::selection {
+    background: theme('colors.terra.200');
+    color: theme('colors.ink.DEFAULT');
+  }
+}
+
+@layer components {
+  .container-site {
+    @apply mx-auto w-full max-w-site px-6 md:px-8;
+  }
+  .eyebrow {
+    @apply font-mono text-eyebrow uppercase text-terra-700;
+  }
+  /* Buttons — primary uses terra-700 so white text passes AA. */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-btn font-semibold transition duration-200 ease-soft;
+    padding: 13px 22px;
+  }
+  .btn-primary {
+    @apply bg-terra-700 text-white shadow-md;
+  }
+  .btn-primary:hover {
+    @apply -translate-y-px shadow-lg;
+    background-image: linear-gradient(135deg, theme('colors.terra.600'), theme('colors.terra.300'));
+  }
+  .btn-secondary {
+    @apply border-[1.5px] border-ink bg-transparent text-ink;
+  }
+  .btn-secondary:hover {
+    @apply bg-sand;
+  }
+  .btn-on-dark {
+    @apply border-[1.5px] bg-transparent text-white;
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+  .btn-on-dark:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+  .btn-ghost {
+    @apply bg-transparent px-1.5 text-terra-700;
+  }
+  .btn-ghost:hover {
+    @apply underline;
+  }
+  .card {
+    @apply rounded-card bg-white p-6 shadow-md transition duration-200 ease-soft;
+  }
+  .card:hover {
+    @apply -translate-y-0.5 shadow-lg;
+  }
+  .feature-icon {
+    @apply mb-3.5 grid h-11 w-11 place-items-center rounded-xl bg-terra-50 text-terra-700;
+  }
+}
+
+/* Reveal-on-scroll — disabled when the user prefers reduced motion. */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s var(--tw-ease, cubic-bezier(0.22, 1, 0.36, 1)), transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+}

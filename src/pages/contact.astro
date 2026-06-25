@@ -1,0 +1,121 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+const API_URL = 'http://localhost:4000/v1'; // TODO: production API URL
+---
+
+<Base title="Contact — Candango">
+  <Nav />
+  <main class="bg-white">
+    <div class="container-site max-w-content py-24">
+      <p class="eyebrow">Contact &amp; support</p>
+      <h1 class="mt-2 text-h1 font-bold text-ink">Talk to us</h1>
+      <p class="mt-3 text-ink-muted">
+        Questions about Candango, your account, or anything else? Send a message and we'll get back to you.
+      </p>
+
+      <form id="contact-form" class="mt-8 space-y-5" data-api={API_URL} novalidate>
+        <!-- Honeypot: hidden from humans; bots that fill it get silently dropped. -->
+        <div class="absolute -left-[9999px]" aria-hidden="true">
+          <label>Company<input type="text" name="company" tabindex="-1" autocomplete="off" /></label>
+        </div>
+
+        <div class="grid gap-5 sm:grid-cols-2">
+          <label class="block">
+            <span class="mb-1.5 block text-sm font-medium text-ink">Name</span>
+            <input
+              name="name" type="text" required maxlength="120" autocomplete="name"
+              class="w-full rounded-btn border border-sand-300 bg-white px-3.5 py-2.5 text-ink outline-none transition focus:border-terra-600 focus:ring-2 focus:ring-terra-200"
+            />
+          </label>
+          <label class="block">
+            <span class="mb-1.5 block text-sm font-medium text-ink">Email</span>
+            <input
+              name="email" type="email" required autocomplete="email"
+              class="w-full rounded-btn border border-sand-300 bg-white px-3.5 py-2.5 text-ink outline-none transition focus:border-terra-600 focus:ring-2 focus:ring-terra-200"
+            />
+          </label>
+        </div>
+
+        <label class="block">
+          <span class="mb-1.5 block text-sm font-medium text-ink">Message</span>
+          <textarea
+            name="message" required rows="6" maxlength="5000"
+            class="w-full rounded-btn border border-sand-300 bg-white px-3.5 py-2.5 text-ink outline-none transition focus:border-terra-600 focus:ring-2 focus:ring-terra-200"
+          ></textarea>
+        </label>
+
+        <div class="flex items-center gap-4">
+          <button type="submit" class="btn btn-primary">Send message</button>
+          <span id="form-status" class="hidden text-sm font-medium text-error" role="alert" aria-live="assertive"></span>
+        </div>
+      </form>
+
+      <!-- Thank-you screen — revealed in place after a successful submit. -->
+      <div id="contact-success" class="hidden">
+        <div class="rounded-card bg-sand-cream p-10 text-center shadow-sm sm:p-12">
+          <div class="mx-auto mb-5 grid h-16 w-16 place-items-center rounded-full bg-pine-100 text-pine-700">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+          </div>
+          <h2 tabindex="-1" class="text-h2 font-bold text-ink outline-none">Thank you!</h2>
+          <p class="mx-auto mt-3 max-w-[44ch] text-ink-muted">
+            We got your message and will get back to you soon — keep an eye on your inbox.
+          </p>
+          <a href="/" class="btn btn-primary mt-7">Back to home</a>
+        </div>
+      </div>
+
+      <p id="contact-fallback" class="mt-8 text-sm text-ink-soft">
+        Prefer email? Reach us at
+        <a href="mailto:hello@candango.example" class="text-terra-700 underline">hello@candango.example</a>.
+      </p>
+    </div>
+  </main>
+  <Footer />
+
+  <script>
+    const form = document.getElementById('contact-form') as HTMLFormElement | null;
+    const status = document.getElementById('form-status');
+    if (form && status) {
+      const api = form.dataset.api;
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+        const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
+        // Map a Turnstile token to the field the API expects (when the widget is enabled).
+        if (data['cf-turnstile-response']) data.token = data['cf-turnstile-response'];
+
+        btn.disabled = true;
+        btn.textContent = 'Sending…';
+        status.className = 'hidden text-sm font-medium text-error';
+        status.textContent = '';
+        try {
+          const res = await fetch(`${api}/contact`, {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify(data),
+          });
+          if (!res.ok) throw new Error('request failed');
+          // Swap in the thank-you screen.
+          form.reset();
+          form.classList.add('hidden');
+          document.getElementById('contact-fallback')?.classList.add('hidden');
+          const success = document.getElementById('contact-success');
+          if (success) {
+            success.classList.remove('hidden');
+            const heading = success.querySelector('h2') as HTMLElement | null;
+            heading?.focus();
+            success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        } catch {
+          btn.disabled = false;
+          btn.textContent = 'Send message';
+          status.classList.remove('hidden');
+          status.textContent = 'Something went wrong. Please try again, or email us directly.';
+        }
+      });
+    }
+  </script>
+</Base>
