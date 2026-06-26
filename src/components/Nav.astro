@@ -4,7 +4,7 @@ const links = [
   { label: 'Pricing', href: '#pricing' },
   { label: 'FAQ', href: '#faq' },
 ];
-const appUrl = 'http://localhost:3000'; // TODO: production app URL
+const appUrl = import.meta.env.PUBLIC_APP_URL ?? 'http://localhost:3000';
 ---
 
 <header class="sticky top-0 z-50 border-b border-sand-200 bg-sand-cream/80 backdrop-blur-md backdrop-saturate-150">

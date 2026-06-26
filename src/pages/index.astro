@@ -5,7 +5,7 @@ import Footer from '../components/Footer.astro';
 import Shot from '../components/Shot.astro';
 import Carousel from '../components/Carousel.astro';
 
-const appUrl = 'http://localhost:3000'; // TODO: production app URL
+const appUrl = import.meta.env.PUBLIC_APP_URL ?? 'http://localhost:3000';
 
 // Email/calendar spotlight slider — swap each `label` for a real `src` screenshot later.
 const emailSlides = [
