@@ -7,11 +7,11 @@ import Carousel from '../components/Carousel.astro';
 
 const appUrl = import.meta.env.PUBLIC_APP_URL ?? 'http://localhost:3000';
 
-// Email/calendar spotlight slider — swap each `label` for a real `src` screenshot later.
+// Email/calendar spotlight slider.
 const emailSlides = [
-  { label: 'Gmail in Candango', caption: 'Email Sync' },
-  { label: 'Google Calendar', caption: 'Calendar Sync' },
-  { label: 'The deal screen', caption: 'Easy Access' },
+  { label: 'Gmail in Candango', src: '/shots/email.png', alt: 'Synced Gmail inbox inside Candango', caption: 'Email Sync' },
+  { label: 'Google Calendar', src: '/shots/calendar.png', alt: 'Google Calendar activities inside Candango', caption: 'Calendar Sync' },
+  { label: 'The deal screen', src: '/shots/deal.png', alt: 'A deal with its full activity timeline', caption: 'Easy Access' },
 ];
 
 const features = [
@@ -28,9 +28,10 @@ const steps = [
 ];
 
 const gallery = [
-  { label: 'dashboard', tone: 'light' as const },
-  { label: 'contacts', tone: 'light' as const },
-  { label: 'reports', tone: 'pine' as const },
+  { src: '/shots/dashboard.png', alt: 'Dashboard — open deals, weighted pipeline, and won this month' },
+  { src: '/shots/reports.png', alt: 'Reports — pipeline value by stage and by sales rep' },
+  { src: '/shots/contacts.png', alt: 'People and companies, linked to their deals' },
+  { src: '/shots/integrations.png', alt: 'Optional Google and QuickBooks integrations' },
 ];
 
 const openPlatform = [
@@ -70,7 +71,7 @@ const faqs = [
       </div>
       <p class="mt-4 text-sm text-ink-soft">Free for 7 days. No credit card.</p>
 
-      <Shot label="product screenshot — pipeline board" class="mt-14" />
+      <Shot src="/shots/pipeline.png" alt="Candango pipeline board with deals across stages" class="mt-14" />
     </div>
   </section>
 
@@ -119,7 +120,7 @@ const faqs = [
   <!-- SPOTLIGHT 2 — QuickBooks (image left) -->
   <section class="bg-sand-cream py-24 md:py-28">
     <div class="container-site grid items-center gap-12 md:grid-cols-2">
-      <Shot label="estimates & invoices in Candango" tone="pine" class="reveal md:order-1" />
+      <Shot src="/shots/invoices.png" alt="Estimates and invoices on a deal, synced with QuickBooks" tone="pine" class="reveal md:order-1" />
       <div class="reveal md:order-2">
         <p class="eyebrow">QuickBooks integration</p>
         <h2 class="mt-2 text-h2 font-bold text-ink">Sync and manage estimates &amp; invoices.</h2>
@@ -140,9 +141,9 @@ const faqs = [
         <h2 class="mt-2 text-h1 font-bold text-ink">See it in action.</h2>
         <p class="mt-3 text-ink-muted">The screens your team will live in every day.</p>
       </div>
-      <div class="mt-12 grid gap-6 md:grid-cols-3">
+      <div class="mt-12 grid gap-6 md:grid-cols-2">
         {gallery.map((g) => (
-          <Shot label={g.label} tone={g.tone} height="h-56" class="reveal" />
+          <Shot src={g.src} alt={g.alt} class="reveal" />
         ))}
       </div>
     </div>

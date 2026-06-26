@@ -1,24 +1,28 @@
-# Product screenshots for the marketing site
+# Product screenshots used by the marketing site
 
-Drop the 8 PNGs below into **this folder** with these **exact filenames**, then I'll wire
-them into the landing (`src/pages/index.astro`) and redeploy. Until a file exists, that
-slot shows a labelled placeholder.
+These PNGs are wired into `src/pages/index.astro`. To refresh one, replace the file
+in place (keep the filename) — the site references it by name.
 
-| Filename | Where it appears | Capture this screen |
-|---|---|---|
-| `pipeline.png` | **Hero** (top of the page) | The **pipeline / Kanban board** (deals across stages — the most impressive view) |
-| `email.png` | "Sync email & calendar" slider — **Email Sync** | The **email/inbox** (the `/emails` screen, or a deal's email thread) |
-| `calendar.png` | slider — **Calendar Sync** | The **activities calendar** (month view) |
-| `deal.png` | slider — **Easy Access** | A **deal detail** page (timeline with notes/email/activities) |
-| `invoices.png` | "QuickBooks integration" spotlight | The **estimates & invoices** panel on a deal |
-| `dashboard.png` | "A look inside" gallery | The **dashboard** (KPI cards + charts) |
-| `contacts.png` | gallery | The **contacts** screen (people or companies list) |
-| `reports.png` | gallery | The **reports** screen (charts) |
+| File | Where it appears on the landing page |
+|---|---|
+| `pipeline.png` | **Hero** — the pipeline / Kanban board |
+| `email.png` | "Sync your email & calendar" carousel — **Email Sync** slide |
+| `calendar.png` | carousel — **Calendar Sync** slide |
+| `deal.png` | carousel — **Easy Access** slide (deal detail + timeline) |
+| `invoices.png` | "QuickBooks integration" spotlight (estimates & invoices) |
+| `dashboard.png` | "A look inside" gallery — the **Dashboard** (KPIs + open deals) |
+| `reports.png` | gallery — the **Reports** screen (charts) |
+| `contacts.png` | gallery — the **People** list |
+| `integrations.png` | gallery — Settings → **Integrations** (Google + QuickBooks) |
 
-## Tips
-- Use your **local app with the demo data** (`demo@candango.app`) so the screens look full.
-- **Light mode** (the app default).
-- Capture the **app content area** — the site wraps each image in a browser frame, so you
-  don't need the browser's address bar in the shot (full-window is fine too).
-- **PNG** (or WebP). A width around **1400–1600px** looks crisp; they scale to fit.
-- Don't worry about exact aspect ratio — images scale to the frame width.
+## Note on source filenames (2026-06-26 import)
+The originals came from `~/Pictures/Screenshots/` with two swapped names, fixed on copy:
+- `home.png` (the Dashboard) → `dashboard.png`
+- `dashboard.png` (the Reports screen) → `reports.png`
+
+The "Internal Server Error" screenshot in that folder is **not** a product shot and is excluded.
+
+## Tips when recapturing
+- Local app with the demo data (`demo@candango.app`), **light mode**.
+- Capture the app content area (the site wraps each image in a browser frame).
+- PNG/WebP, ~1400–1600px wide; images scale to fit.
