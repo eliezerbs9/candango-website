@@ -66,11 +66,6 @@ const API_URL = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:4000/v1';
           <a href="/" class="btn btn-primary mt-7">Back to home</a>
         </div>
       </div>
-
-      <p id="contact-fallback" class="mt-8 text-sm text-ink-soft">
-        Prefer email? Reach us at
-        <a href="mailto:hello@candango.example" class="text-terra-700 underline">hello@candango.example</a>.
-      </p>
     </div>
   </main>
   <Footer />
@@ -101,7 +96,6 @@ const API_URL = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:4000/v1';
           // Swap in the thank-you screen.
           form.reset();
           form.classList.add('hidden');
-          document.getElementById('contact-fallback')?.classList.add('hidden');
           const success = document.getElementById('contact-success');
           if (success) {
             success.classList.remove('hidden');
@@ -113,7 +107,7 @@ const API_URL = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:4000/v1';
           btn.disabled = false;
           btn.textContent = 'Send message';
           status.classList.remove('hidden');
-          status.textContent = 'Something went wrong. Please try again, or email us directly.';
+          status.textContent = 'Something went wrong. Please try again.';
         }
       });
     }
